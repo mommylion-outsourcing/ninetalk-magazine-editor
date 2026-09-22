@@ -2148,6 +2148,10 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
     /* scroll-in reveal: each .reveal block fades/slides up once, the first time
        it enters the viewport, then is left alone (no re-trigger on scroll back up) */
     p.push("<script>(function(){var els=document.querySelectorAll('.reveal,.reveal-media');if(!('IntersectionObserver' in window)){els.forEach(function(el){el.classList.add('in')});return}var io=new IntersectionObserver(function(entries){entries.filter(function(en){return en.isIntersecting}).forEach(function(en,idx){setTimeout(function(){en.target.classList.add('in')},idx*140);io.unobserve(en.target)})},{threshold:.15,rootMargin:'0px 0px -60px 0px'});els.forEach(function(el){io.observe(el)})})();</" + "script>");
+    /* 나인톡 명함: 발송한 회원의 명함을 페이지 맨 아래에 붙이는 공용 스크립트.
+       어드민 매거진 관리(링크형)가 URL 에 cp/mti 를 붙여 주면 그때만 동작하고,
+       파라미터가 없으면 아무것도 그리지 않는다. 경로는 ad.9box.kr 기준 절대경로. */
+    p.push('<script src="/contents/common/namecard.js" defer></' + "script>");
     p.push("</body></html>");
 
     return { html: p.join(""), imgs: imgs };
