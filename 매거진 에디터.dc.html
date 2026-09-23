@@ -976,7 +976,7 @@ const DEFAULT_MODEL = "claude-sonnet-5";
    slot -- each gets its own id, and a small index in localStorage tracks
    which ids exist so the input screen can list and resume any of them. */
 const DRAFTS_INDEX_KEY = "magazine-editor:drafts:index";
-const MAX_DRAFTS = 20;
+const MAX_DRAFTS = 100;
 function draftKey(id) { return "magazine-editor:draft:" + id; }
 function newDraftId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
 function getDraftsIndex() {
