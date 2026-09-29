@@ -417,6 +417,30 @@
                 </div>
               </div>
             </sc-if>
+            <sc-if value="{{ titleExtra.show }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px">
+                <sc-for list="{{ titleExtra.extraImages }}" as="ei" hint-placeholder-count="0">
+                  <div style="position: relative">
+                    <sc-if value="{{ ei.isVideo }}" hint-placeholder-val="{{ false }}">
+                      <video data-src="{{ ei.src }}" autoplay muted loop playsinline style="width: 100%; height: auto; display: block"></video>
+                    </sc-if>
+                    <sc-if value="{{ ei.isImage }}" hint-placeholder-val="{{ true }}">
+                      <img data-src="{{ ei.src }}" alt="" style="width: 100%; height: auto; display: block">
+                    </sc-if>
+                    <div style="position: absolute; right: 8px; bottom: 8px; display: flex; gap: 6px">
+                      <button onClick="{{ ei.onMoveUp }}" disabled="{{ !ei.canMoveUp }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer; opacity: {{ ei.moveUpOpacity }}">▲</button>
+                      <button onClick="{{ ei.onMoveDown }}" disabled="{{ !ei.canMoveDown }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer; opacity: {{ ei.moveDownOpacity }}">▼</button>
+                      <button onClick="{{ ei.onRemove }}" style="border: none; background: rgba(180,84,74,.92); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">삭제</button>
+                    </div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ titleExtra.canAddExtraImage }}" hint-placeholder-val="{{ true }}">
+                  <div onClick="{{ titleExtra.onAddExtraImage }}" onDragOver="{{ allowDrop }}" onDrop="{{ titleExtra.onAddExtraImageDrop }}" style="border: 1px dashed #c9c5bd; background: repeating-linear-gradient(135deg, rgba(0,0,0,.022) 0 6px, transparent 6px 12px); padding: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer">
+                    <span style="font-size: 11px; font-family: ui-monospace, monospace; color: #99948b">＋ 추가 이미지 업로드</span>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
           </div>
 
           <sc-if value="{{ introEditing }}" hint-placeholder-val="{{ false }}">
@@ -478,6 +502,30 @@
                     </div>
                   </sc-if>
                 </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ introExtra.show }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px">
+                <sc-for list="{{ introExtra.extraImages }}" as="ei" hint-placeholder-count="0">
+                  <div style="position: relative">
+                    <sc-if value="{{ ei.isVideo }}" hint-placeholder-val="{{ false }}">
+                      <video data-src="{{ ei.src }}" autoplay muted loop playsinline style="width: 100%; height: auto; display: block"></video>
+                    </sc-if>
+                    <sc-if value="{{ ei.isImage }}" hint-placeholder-val="{{ true }}">
+                      <img data-src="{{ ei.src }}" alt="" style="width: 100%; height: auto; display: block">
+                    </sc-if>
+                    <div style="position: absolute; right: 8px; bottom: 8px; display: flex; gap: 6px">
+                      <button onClick="{{ ei.onMoveUp }}" disabled="{{ !ei.canMoveUp }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer; opacity: {{ ei.moveUpOpacity }}">▲</button>
+                      <button onClick="{{ ei.onMoveDown }}" disabled="{{ !ei.canMoveDown }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer; opacity: {{ ei.moveDownOpacity }}">▼</button>
+                      <button onClick="{{ ei.onRemove }}" style="border: none; background: rgba(180,84,74,.92); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">삭제</button>
+                    </div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ introExtra.canAddExtraImage }}" hint-placeholder-val="{{ true }}">
+                  <div onClick="{{ introExtra.onAddExtraImage }}" onDragOver="{{ allowDrop }}" onDrop="{{ introExtra.onAddExtraImageDrop }}" style="border: 1px dashed #c9c5bd; background: repeating-linear-gradient(135deg, rgba(0,0,0,.022) 0 6px, transparent 6px 12px); padding: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer">
+                    <span style="font-size: 11px; font-family: ui-monospace, monospace; color: #99948b">＋ 추가 이미지 업로드</span>
+                  </div>
+                </sc-if>
               </div>
             </sc-if>
           </div>
@@ -562,6 +610,30 @@
                         </div>
                       </sc-if>
                     </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ s.subExtra.show }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px">
+                    <sc-for list="{{ s.subExtra.extraImages }}" as="ei" hint-placeholder-count="0">
+                      <div style="position: relative">
+                        <sc-if value="{{ ei.isVideo }}" hint-placeholder-val="{{ false }}">
+                          <video data-src="{{ ei.src }}" autoplay muted loop playsinline style="width: 100%; height: auto; display: block"></video>
+                        </sc-if>
+                        <sc-if value="{{ ei.isImage }}" hint-placeholder-val="{{ true }}">
+                          <img data-src="{{ ei.src }}" alt="" style="width: 100%; height: auto; display: block">
+                        </sc-if>
+                        <div style="position: absolute; right: 8px; bottom: 8px; display: flex; gap: 6px">
+                          <button onClick="{{ ei.onMoveUp }}" disabled="{{ !ei.canMoveUp }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer; opacity: {{ ei.moveUpOpacity }}">▲</button>
+                          <button onClick="{{ ei.onMoveDown }}" disabled="{{ !ei.canMoveDown }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer; opacity: {{ ei.moveDownOpacity }}">▼</button>
+                          <button onClick="{{ ei.onRemove }}" style="border: none; background: rgba(180,84,74,.92); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">삭제</button>
+                        </div>
+                      </div>
+                    </sc-for>
+                    <sc-if value="{{ s.subExtra.canAddExtraImage }}" hint-placeholder-val="{{ true }}">
+                      <div onClick="{{ s.subExtra.onAddExtraImage }}" onDragOver="{{ allowDrop }}" onDrop="{{ s.subExtra.onAddExtraImageDrop }}" style="border: 1px dashed #c9c5bd; background: repeating-linear-gradient(135deg, rgba(0,0,0,.022) 0 6px, transparent 6px 12px); padding: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer">
+                        <span style="font-size: 11px; font-family: ui-monospace, monospace; color: #99948b">＋ 추가 이미지 업로드</span>
+                      </div>
+                    </sc-if>
                   </div>
                 </sc-if>
               </div>
@@ -692,6 +764,28 @@
                 </div>
               </div>
             </sc-if>
+            <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px">
+              <sc-for list="{{ finalExtra.extraImages }}" as="ei" hint-placeholder-count="0">
+                <div style="position: relative">
+                  <sc-if value="{{ ei.isVideo }}" hint-placeholder-val="{{ false }}">
+                    <video data-src="{{ ei.src }}" autoplay muted loop playsinline style="width: 100%; height: auto; display: block"></video>
+                  </sc-if>
+                  <sc-if value="{{ ei.isImage }}" hint-placeholder-val="{{ true }}">
+                    <img data-src="{{ ei.src }}" alt="" style="width: 100%; height: auto; display: block">
+                  </sc-if>
+                  <div style="position: absolute; right: 8px; bottom: 8px; display: flex; gap: 6px">
+                    <button onClick="{{ ei.onMoveUp }}" disabled="{{ !ei.canMoveUp }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer; opacity: {{ ei.moveUpOpacity }}">▲</button>
+                    <button onClick="{{ ei.onMoveDown }}" disabled="{{ !ei.canMoveDown }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer; opacity: {{ ei.moveDownOpacity }}">▼</button>
+                    <button onClick="{{ ei.onRemove }}" style="border: none; background: rgba(180,84,74,.92); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">삭제</button>
+                  </div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ finalExtra.canAddExtraImage }}" hint-placeholder-val="{{ true }}">
+                <div onClick="{{ finalExtra.onAddExtraImage }}" onDragOver="{{ allowDrop }}" onDrop="{{ finalExtra.onAddExtraImageDrop }}" style="border: 1px dashed #c9c5bd; background: repeating-linear-gradient(135deg, rgba(0,0,0,.022) 0 6px, transparent 6px 12px); padding: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer">
+                  <span style="font-size: 11px; font-family: ui-monospace, monospace; color: #99948b">＋ 추가 이미지 업로드</span>
+                </div>
+              </sc-if>
+            </div>
           </div>
 
           <div style="margin-top: 32px; border-top: 1px dashed #d3cfc8; padding-top: 24px">
@@ -1142,6 +1236,15 @@ const EXTRA_SLOTS = {
   intro: { img: "introImage", on: "introImgOn", prompt: "introPrompt", aspect: "introAspect", label: "인트로 아래" },
   sub: { img: "subImage", on: "subImgOn", prompt: "subPrompt", aspect: "subImageAspect", label: "소제목 아래" }
 };
+/* "＋ 추가 이미지" lists for places other than the section body (whose list
+   stays sections[].images): same upload/drag-drop/reorder/remove and
+   6-image cap, stored as plain data-URL arrays next to each place's main
+   image. Missing on older drafts = treated as []. */
+const EXTRA_LISTS = { title: "titleImages", intro: "introImages", sub: "subImages", final: "finalImages" };
+/* IndexedDB slot-id prefixes for the doc-level lists: "<prefix>:x:<j>";
+   the per-section one is "sec:<i>:sub:x:<j>" (vs "sec:<i>:x:<j>" for the
+   section body list and "sec:<i>:sub" for the 소제목 아래 main image). */
+const DOC_EXTRA_IDS = { titleImg: "titleImages", introImg: "introImages", final: "finalImages" };
 const SLOT_EMPTY_PROMPT = "생성된 이미지 프롬프트가 없습니다. 직접 입력해 주세요.";
 const SLOT_LOADING_PROMPT = "프롬프트 생성 중…";
 /* shown instead of SLOT_EMPTY_PROMPT when there is no AI route (no host
@@ -1387,21 +1490,33 @@ function imgSlotIds(doc) {
   if (doc.finalImage) ids.push("final");
   if (doc.titleImage) ids.push("titleImg");
   if (doc.introImage) ids.push("introImg");
+  Object.keys(DOC_EXTRA_IDS).forEach(function (pre) {
+    (doc[DOC_EXTRA_IDS[pre]] || []).forEach(function (img, j) { if (img) ids.push(pre + ":x:" + j); });
+  });
   (doc.sections || []).forEach(function (s, i) {
     if (s.image) ids.push("sec:" + i);
     if (s.subImage) ids.push("sec:" + i + ":sub");
     (s.images || []).forEach(function (img, j) { if (img) ids.push("sec:" + i + ":x:" + j); });
+    (s.subImages || []).forEach(function (img, j) { if (img) ids.push("sec:" + i + ":sub:x:" + j); });
   });
   (doc.btns || []).forEach(function (b, i) { if (b.img) ids.push("btn:" + i); });
   return ids;
 }
 function getImgValue(doc, id) {
+  const dx = /^(titleImg|introImg|final):x:(\d+)$/.exec(id);
+  if (dx) { const arr = doc[DOC_EXTRA_IDS[dx[1]]]; return arr ? arr[+dx[2]] : null; }
   if (id === "thumb") return doc.thumbnail;
   if (id === "final") return doc.finalImage;
   if (id === "titleImg") return doc.titleImage;
   if (id === "introImg") return doc.introImage;
   if (id.indexOf("sec:") === 0) {
     const rest = id.slice(4);
+    /* must run before the ":x:" branch below -- "N:sub:x:J" contains ":x:" */
+    const sx = /^(\d+):sub:x:(\d+)$/.exec(rest);
+    if (sx) {
+      const s = doc.sections[+sx[1]];
+      return s && s.subImages ? s.subImages[+sx[2]] : null;
+    }
     if (/^\d+:sub$/.test(rest)) {
       const s = doc.sections[parseInt(rest, 10)];
       return s ? s.subImage : null;
@@ -1423,10 +1538,15 @@ function stripImages(doc) {
   copy.finalImage = null;
   if (copy.titleImage) copy.titleImage = null;
   if (copy.introImage) copy.introImage = null;
+  Object.keys(DOC_EXTRA_IDS).forEach(function (pre) {
+    const f = DOC_EXTRA_IDS[pre];
+    if (copy[f]) copy[f] = copy[f].map(function () { return null; });
+  });
   (copy.sections || []).forEach(function (s) {
     s.image = null;
     if (s.subImage) s.subImage = null;
     if (s.images) s.images = s.images.map(function () { return null; });
+    if (s.subImages) s.subImages = s.subImages.map(function () { return null; });
   });
   (copy.btns || []).forEach(function (b) { b.img = null; });
   return copy;
@@ -1451,13 +1571,23 @@ function loadImagesInto(doc, draftId) {
       if (!r || !r.val) return;
       const id = r.id;
       const val = r.val;
-      if (id === "thumb") doc.thumbnail = val;
+      const dx = /^(titleImg|introImg|final):x:(\d+)$/.exec(id);
+      if (dx) {
+        const f = DOC_EXTRA_IDS[dx[1]];
+        if (!doc[f]) doc[f] = [];
+        doc[f][+dx[2]] = val;
+      }
+      else if (id === "thumb") doc.thumbnail = val;
       else if (id === "final") doc.finalImage = val;
       else if (id === "titleImg") doc.titleImage = val;
       else if (id === "introImg") doc.introImage = val;
       else if (id.indexOf("sec:") === 0) {
         const rest = id.slice(4);
-        if (/^\d+:sub$/.test(rest)) {
+        const sx = /^(\d+):sub:x:(\d+)$/.exec(rest);
+        if (sx) {
+          const s = doc.sections && doc.sections[+sx[1]];
+          if (s) { if (!s.subImages) s.subImages = []; s.subImages[+sx[2]] = val; }
+        } else if (/^\d+:sub$/.test(rest)) {
           const s = doc.sections && doc.sections[parseInt(rest, 10)];
           if (s) s.subImage = val;
         } else if (rest.indexOf(":x:") !== -1) {
@@ -2526,6 +2656,71 @@ ${existing.length ? existing.join("\n") : "없음"}
     });
   };
 
+  /* same as addExtraImages (read all, commit once, cap 6) for the other
+     "＋ 추가 이미지" places: kind = title | intro | sub | final; i = section
+     index for "sub". */
+  _extraHost = (d, kind, i) => (kind === "sub" ? (d.sections || [])[i] || null : d);
+  addExtraImagesAt = (kind, i, files) => {
+    const field = EXTRA_LISTS[kind];
+    const host0 = this._extraHost(this.state.doc, kind, i);
+    if (!host0) return;
+    const cur = (host0[field] || []).length;
+    const room = Math.max(0, 6 - cur);
+    const picked = files.slice(0, room);
+    if (!picked.length) return;
+    const urls = new Array(picked.length);
+    let remaining = picked.length;
+    picked.forEach((f, idx) => {
+      this.readFile(f, (url) => {
+        urls[idx] = url;
+        remaining -= 1;
+        if (remaining === 0) {
+          this.setDoc((d) => {
+            const h = this._extraHost(d, kind, i);
+            if (!h) return;
+            if (!h[field]) h[field] = [];
+            urls.forEach((u) => { if (u) h[field].push(u); });
+          });
+        }
+      });
+    });
+  };
+
+  /* template values for one of those lists -- same shape/behavior as the
+     section body's extraImages/canAddExtraImage/onAddExtraImage(Drop). */
+  _extraVals = (kind, host, i, show) => {
+    const self = this;
+    const field = EXTRA_LISTS[kind];
+    const list = (host && host[field]) || [];
+    const edit = function (fn) { self.setDoc(function (d) { const h = self._extraHost(d, kind, i); if (h && h[field]) fn(h[field]); }); };
+    return {
+      show: !!show,
+      extraImages: list.map(function (src, j, arr) {
+        return {
+          src: src,
+          isVideo: isVideoSrc(src),
+          isImage: !isVideoSrc(src),
+          onRemove: function () { edit(function (a) { a.splice(j, 1); }); },
+          canMoveUp: j > 0,
+          canMoveDown: j < arr.length - 1,
+          moveUpOpacity: j > 0 ? 1 : 0.3,
+          moveDownOpacity: j < arr.length - 1 ? 1 : 0.3,
+          onMoveUp: function () {
+            if (j === 0) return;
+            edit(function (a) { const x = a[j - 1]; a[j - 1] = a[j]; a[j] = x; });
+          },
+          onMoveDown: function () {
+            if (j >= arr.length - 1) return;
+            edit(function (a) { const x = a[j + 1]; a[j + 1] = a[j]; a[j] = x; });
+          }
+        };
+      }),
+      canAddExtraImage: list.length < 6,
+      onAddExtraImage: function () { self.openPicker(true, function (fs) { self.addExtraImagesAt(kind, i, fs); }); },
+      onAddExtraImageDrop: function (e) { self.onDropFiles(e, function (fs) { self.addExtraImagesAt(kind, i, fs); }); }
+    };
+  };
+
   onDropFiles = (e, cb) => {
     e.preventDefault();
     e.stopPropagation();
@@ -2647,11 +2842,22 @@ ${existing.length ? existing.join("\n") : "없음"}
       const src = put(host[f.img]);
       if (src) p.push(mediaTag(src, host[f.img], cls, extraStyle));
     };
+    /* "＋ 추가 이미지" lists outside the section body: each image goes out
+       like the section body extras (put + mediaTag per image), styled the
+       same as the main image of the place it belongs to. */
+    const extraMedia = function (list, cls, extraStyle) {
+      (list || []).forEach(function (u) {
+        const src = put(u);
+        if (src) p.push(mediaTag(src, u, cls, extraStyle));
+      });
+    };
 
     p.push('<h1 class="ttl hero" style="animation-delay:.22s">' + stripEmptyMarks(doc.title || "") + "</h1>");
     slotMedia(doc, EXTRA_SLOTS.title, "img hero", "margin-top:0;margin-bottom:22px;animation-delay:.3s");
+    if (doc.titleImgOn === true) extraMedia(doc.titleImages, "img hero", "margin-top:0;margin-bottom:22px;animation-delay:.3s");
     p.push('<div class="body reveal">' + bodyToHtml(doc.intro || "") + "</div>");
     slotMedia(doc, EXTRA_SLOTS.intro, "img reveal-media");
+    if (doc.introImgOn === true) extraMedia(doc.introImages, "img reveal-media");
 
     doc.sections.forEach(function (s, i) {
       const divName = s.divider || doc.divider || "여백만";
@@ -2662,6 +2868,7 @@ ${existing.length ? existing.join("\n") : "없음"}
       const numHtml = doc.numOn === false ? "" : '<span class="num" style="' + (doc.numFill ? "background:" + t.num + ";color:" + t.bg + ";border-color:" + t.num : "") + '">' + esc((NUM_STYLES[doc.numStyle] || NUM_STYLES["01"])(i)) + "</span>";
       p.push("<div>" + numHtml + '<h2 class="sub">' + stripEmptyMarks(s.subhead || "") + "</h2></div>");
       slotMedia(s, EXTRA_SLOTS.sub, "img r-img", "margin-top:0;margin-bottom:18px");
+      if (s.subImgOn === true) extraMedia(s.subImages, "img r-img", "margin-top:0;margin-bottom:18px");
       p.push('<div class="body">' + bodyToHtml(s.body) + "</div>");
       const src = s.imgOn === false ? null : put(s.image);
       if (src) p.push(mediaTag(src, s.image, "img r-img"));
@@ -2676,6 +2883,12 @@ ${existing.length ? existing.join("\n") : "없음"}
 
     const fin = doc.finalOn === false ? null : put(doc.finalImage);
     if (fin) p.push(mediaTag(fin, doc.finalImage, "img reveal-media", "margin-top:40px"));
+    /* like the section body extras: independent of the main image's show/hide */
+    let finEmitted = !!fin;
+    (doc.finalImages || []).forEach(function (u) {
+      const src = put(u);
+      if (src) { p.push(mediaTag(src, u, "img reveal-media", finEmitted ? "" : "margin-top:40px")); finEmitted = true; }
+    });
 
     const btns = (doc.btns || []).filter(function (b) { return b.on !== false; });
     if (btns.length) {
@@ -3081,6 +3294,7 @@ ${existing.length ? existing.join("\n") : "없음"}
         onClear: function () { self.setDoc(function (d) { d.sections[i].image = null; d.sections[i].imgOn = true; }); },
         /* optional 소제목 아래 image slot (default OFF) */
         sub: self._slotVals("sub", s, i),
+        subExtra: self._extraVals("sub", s, i, s.subImgOn === true),
 
         /* extra images: uploaded after generation, so no AI prompt needed -- just upload/remove/reorder */
         extraImages: (s.images || []).map(function (src, j, arr) {
@@ -3405,6 +3619,9 @@ ${existing.length ? existing.join("\n") : "없음"}
       introHtml: bodyToHtml(doc.intro || ""),
       titleSlot: this._slotVals("title", doc, -1),
       introSlot: this._slotVals("intro", doc, -1),
+      titleExtra: this._extraVals("title", doc, -1, doc.titleImgOn === true),
+      introExtra: this._extraVals("intro", doc, -1, doc.introImgOn === true),
+      finalExtra: this._extraVals("final", doc, -1, true),
       outroHtml: bodyToHtml(doc.outro || ""),
       onSelectText: this.onSelectText,
       onEditKeyDown: this.onEditKeyDown,
