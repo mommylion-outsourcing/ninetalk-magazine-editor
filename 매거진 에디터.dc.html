@@ -25,6 +25,8 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
   .mz-sec:hover .mz-handle { opacity: 1 !important; }
+  /* optional image slots' PROMPT fields: guidance is a placeholder, never text in the field */
+  .mz-slot-prompt:empty::before { content: attr(data-ph); color: #8d8880; }
   @property --mz-ga { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
   @keyframes mzGlowSpin { to { --mz-ga: 360deg; } }
   .mz-glow {
@@ -362,6 +364,61 @@
             <div class="mz-edit" onClick="{{ startTitleEdit }}" onMouseUp="{{ onSelectText }}" data-rt="title" data-html="{{ titleHtml }}" style="font-size: 26px; font-weight: 700; line-height: 1.4; letter-spacing: -0.02em; color: {{ titleColor }}; margin-bottom: 22px; text-wrap: pretty"></div>
           </sc-if>
 
+          <div style="margin-bottom: 22px">
+            <sc-if value="{{ titleSlot.off }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; align-items: center; gap: 8px; border: 1px dashed #c9c5bd; padding: 6px 12px">
+                <span style="flex: 1; font-size: 11px; font-family: ui-monospace, monospace; color: #a8a39a">{{ titleSlot.offLabel }}</span>
+                <button onClick="{{ titleSlot.toggleOn }}" style="border: 1px solid #cfcbc3; background: #fff; color: #46433d; font: inherit; font-size: 10px; font-weight: 700; padding: 4px 8px; cursor: pointer">켜기</button>
+                <sc-if value="{{ titleSlot.hasImage }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ titleSlot.onClear }}" style="border: 1px solid #cfcbc3; background: #fff; color: #b4544a; font: inherit; font-size: 10px; padding: 4px 8px; cursor: pointer">삭제</button>
+                </sc-if>
+              </div>
+            </sc-if>
+            <sc-if value="{{ titleSlot.showImage }}" hint-placeholder-val="{{ false }}">
+              <div style="position: relative">
+                <sc-if value="{{ titleSlot.isVideo }}" hint-placeholder-val="{{ false }}">
+                  <video data-src="{{ titleSlot.image }}" autoplay muted loop playsinline style="width: 100%; aspect-ratio: {{ titleSlot.aspect }}; object-fit: cover; display: block"></video>
+                </sc-if>
+                <sc-if value="{{ titleSlot.isImage }}" hint-placeholder-val="{{ false }}">
+                  <img data-src="{{ titleSlot.image }}" alt="" style="width: 100%; aspect-ratio: {{ titleSlot.aspect }}; object-fit: cover; display: block">
+                </sc-if>
+                <div style="position: absolute; right: 8px; bottom: 8px; display: flex; gap: 6px">
+                  <button onClick="{{ titleSlot.toggleOn }}" style="border: none; background: rgba(0,0,0,.6); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">숨기기</button>
+                  <button onClick="{{ titleSlot.onPick }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">교체</button>
+                  <button onClick="{{ titleSlot.onClear }}" style="border: none; background: rgba(180,84,74,.92); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">삭제</button>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ titleSlot.noImage }}" hint-placeholder-val="{{ false }}">
+              <div onDragOver="{{ allowDrop }}" onDrop="{{ titleSlot.onDrop }}" style="border: 1px dashed #c9c5bd; background: repeating-linear-gradient(135deg, rgba(0,0,0,.022) 0 6px, transparent 6px 12px); min-height: 190px; display: flex; flex-direction: column; padding: 14px">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">
+                  <div style="display: flex; gap: 6px; align-items: center">
+                    <button onClick="{{ titleSlot.onPick }}" style="border: 1px solid #c2beb6; background: rgba(255,255,255,.6); font: inherit; font-size: 11px; font-weight: 700; color: #6f6a62; padding: 6px 12px; cursor: pointer">이미지 업로드</button>
+                    <button onClick="{{ titleSlot.toggleOn }}" style="border: 1px solid #c2beb6; background: rgba(255,255,255,.6); font: inherit; font-size: 10px; font-weight: 700; font-family: ui-monospace, monospace; color: #6f6a62; padding: 6px 9px; cursor: pointer">ON</button>
+                  </div>
+                  <div onClick="{{ titleSlot.onPick }}" style="font-size: 11px; font-family: ui-monospace, monospace; color: #a8a39a; cursor: pointer">클릭해서 파일 선택</div>
+                </div>
+                <div onClick="{{ stop }}" style="border-top: 1px dashed #cfcbc3; padding-top: 9px; margin-top: 10px">
+                  <div style="display: flex; gap: 8px; align-items: flex-start">
+                    <span style="flex: none; font-size: 10px; font-family: ui-monospace, monospace; color: #a8a39a; padding-top: 2px">{{ titleSlot.promptLabel }}</span>
+                    <span class="mz-slot-prompt" contentEditable="{{ titleSlot.editable }}" suppressContentEditableWarning="{{ true }}" onBlur="{{ titleSlot.onPrompt }}" onInput="{{ titleSlot.onPromptInput }}" data-slot-prompt="{{ titleSlot.promptValue }}" data-ph="{{ titleSlot.placeholder }}" style="flex: 1; min-width: 0; font-size: 11px; line-height: 1.6; color: #8d8880; white-space: pre-line; max-height: 240px; overflow: auto"></span>
+                    <button onClick="{{ titleSlot.onCopy }}" style="flex: none; border: 1px solid #cfcbc3; background: #fff; color: #6f6a62; font: inherit; font-size: 10px; font-family: ui-monospace, monospace; padding: 3px 7px; cursor: pointer">{{ titleSlot.copyLabel }}</button>
+                  </div>
+                  <sc-if value="{{ titleSlot.showActions }}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; justify-content: flex-end; margin-top: 6px">
+                      <sc-if value="{{ titleSlot.showRegen }}" hint-placeholder-val="{{ true }}">
+                        <button onClick="{{ titleSlot.onRegen }}" style="border: none; background: none; color: {{ titleSlot.regenColor }}; font: inherit; font-size: 10px; font-family: ui-monospace, monospace; padding: 0; text-decoration: underline; text-underline-offset: 2px; cursor: pointer">{{ titleSlot.regenLabel }}</button>
+                      </sc-if>
+                      <sc-if value="{{ titleSlot.showCopyReq }}" hint-placeholder-val="{{ false }}">
+                        <button onClick="{{ titleSlot.onCopyReq }}" style="border: 1px solid #cfcbc3; background: #fff; color: #6f6a62; font: inherit; font-size: 10px; font-family: ui-monospace, monospace; padding: 3px 7px; cursor: pointer">{{ titleSlot.copyReqLabel }}</button>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
           <sc-if value="{{ introEditing }}" hint-placeholder-val="{{ false }}">
             <textarea class="mz-edit-area" data-edit-key="intro" value="{{ editValue }}" onChange="{{ onEditValueChange }}" onBlur="{{ commitEdit }}" onKeyDown="{{ onTextareaEnter }}" rows="4" style="font-size: 15px; line-height: 1.8; color: {{ c.text }}"></textarea>
             <div style="font-size: 11px; color: #a8a39a; margin-top: 4px">굵게·색상·크기는 텍스트를 선택하면 나타나는 도구모음에서 바로 적용하세요</div>
@@ -369,6 +426,61 @@
           <sc-if value="{{ introDisplay }}" hint-placeholder-val="{{ true }}">
             <div class="mz-edit" onClick="{{ startIntroEdit }}" onMouseUp="{{ onSelectText }}" data-rt="intro" data-html="{{ introHtml }}" style="font-size: 15px; font-weight: 400; line-height: 1.8; color: {{ c.text }}; text-wrap: pretty"></div>
           </sc-if>
+
+          <div style="margin-top: 16px">
+            <sc-if value="{{ introSlot.off }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; align-items: center; gap: 8px; border: 1px dashed #c9c5bd; padding: 6px 12px">
+                <span style="flex: 1; font-size: 11px; font-family: ui-monospace, monospace; color: #a8a39a">{{ introSlot.offLabel }}</span>
+                <button onClick="{{ introSlot.toggleOn }}" style="border: 1px solid #cfcbc3; background: #fff; color: #46433d; font: inherit; font-size: 10px; font-weight: 700; padding: 4px 8px; cursor: pointer">켜기</button>
+                <sc-if value="{{ introSlot.hasImage }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ introSlot.onClear }}" style="border: 1px solid #cfcbc3; background: #fff; color: #b4544a; font: inherit; font-size: 10px; padding: 4px 8px; cursor: pointer">삭제</button>
+                </sc-if>
+              </div>
+            </sc-if>
+            <sc-if value="{{ introSlot.showImage }}" hint-placeholder-val="{{ false }}">
+              <div style="position: relative">
+                <sc-if value="{{ introSlot.isVideo }}" hint-placeholder-val="{{ false }}">
+                  <video data-src="{{ introSlot.image }}" autoplay muted loop playsinline style="width: 100%; aspect-ratio: {{ introSlot.aspect }}; object-fit: cover; display: block"></video>
+                </sc-if>
+                <sc-if value="{{ introSlot.isImage }}" hint-placeholder-val="{{ false }}">
+                  <img data-src="{{ introSlot.image }}" alt="" style="width: 100%; aspect-ratio: {{ introSlot.aspect }}; object-fit: cover; display: block">
+                </sc-if>
+                <div style="position: absolute; right: 8px; bottom: 8px; display: flex; gap: 6px">
+                  <button onClick="{{ introSlot.toggleOn }}" style="border: none; background: rgba(0,0,0,.6); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">숨기기</button>
+                  <button onClick="{{ introSlot.onPick }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">교체</button>
+                  <button onClick="{{ introSlot.onClear }}" style="border: none; background: rgba(180,84,74,.92); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">삭제</button>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ introSlot.noImage }}" hint-placeholder-val="{{ false }}">
+              <div onDragOver="{{ allowDrop }}" onDrop="{{ introSlot.onDrop }}" style="border: 1px dashed #c9c5bd; background: repeating-linear-gradient(135deg, rgba(0,0,0,.022) 0 6px, transparent 6px 12px); min-height: 190px; display: flex; flex-direction: column; padding: 14px">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">
+                  <div style="display: flex; gap: 6px; align-items: center">
+                    <button onClick="{{ introSlot.onPick }}" style="border: 1px solid #c2beb6; background: rgba(255,255,255,.6); font: inherit; font-size: 11px; font-weight: 700; color: #6f6a62; padding: 6px 12px; cursor: pointer">이미지 업로드</button>
+                    <button onClick="{{ introSlot.toggleOn }}" style="border: 1px solid #c2beb6; background: rgba(255,255,255,.6); font: inherit; font-size: 10px; font-weight: 700; font-family: ui-monospace, monospace; color: #6f6a62; padding: 6px 9px; cursor: pointer">ON</button>
+                  </div>
+                  <div onClick="{{ introSlot.onPick }}" style="font-size: 11px; font-family: ui-monospace, monospace; color: #a8a39a; cursor: pointer">클릭해서 파일 선택</div>
+                </div>
+                <div onClick="{{ stop }}" style="border-top: 1px dashed #cfcbc3; padding-top: 9px; margin-top: 10px">
+                  <div style="display: flex; gap: 8px; align-items: flex-start">
+                    <span style="flex: none; font-size: 10px; font-family: ui-monospace, monospace; color: #a8a39a; padding-top: 2px">{{ introSlot.promptLabel }}</span>
+                    <span class="mz-slot-prompt" contentEditable="{{ introSlot.editable }}" suppressContentEditableWarning="{{ true }}" onBlur="{{ introSlot.onPrompt }}" onInput="{{ introSlot.onPromptInput }}" data-slot-prompt="{{ introSlot.promptValue }}" data-ph="{{ introSlot.placeholder }}" style="flex: 1; min-width: 0; font-size: 11px; line-height: 1.6; color: #8d8880; white-space: pre-line; max-height: 240px; overflow: auto"></span>
+                    <button onClick="{{ introSlot.onCopy }}" style="flex: none; border: 1px solid #cfcbc3; background: #fff; color: #6f6a62; font: inherit; font-size: 10px; font-family: ui-monospace, monospace; padding: 3px 7px; cursor: pointer">{{ introSlot.copyLabel }}</button>
+                  </div>
+                  <sc-if value="{{ introSlot.showActions }}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; justify-content: flex-end; margin-top: 6px">
+                      <sc-if value="{{ introSlot.showRegen }}" hint-placeholder-val="{{ true }}">
+                        <button onClick="{{ introSlot.onRegen }}" style="border: none; background: none; color: {{ introSlot.regenColor }}; font: inherit; font-size: 10px; font-family: ui-monospace, monospace; padding: 0; text-decoration: underline; text-underline-offset: 2px; cursor: pointer">{{ introSlot.regenLabel }}</button>
+                      </sc-if>
+                      <sc-if value="{{ introSlot.showCopyReq }}" hint-placeholder-val="{{ false }}">
+                        <button onClick="{{ introSlot.onCopyReq }}" style="border: 1px solid #cfcbc3; background: #fff; color: #6f6a62; font: inherit; font-size: 10px; font-family: ui-monospace, monospace; padding: 3px 7px; cursor: pointer">{{ introSlot.copyReqLabel }}</button>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-if>
+          </div>
 
           <sc-for list="{{ sections }}" as="s" hint-placeholder-count="0">
             <div class="mz-sec" style="position: relative; margin-top: {{ s.div.gap }}px; border-top: {{ s.div.border }}; background: {{ s.div.bg }}; border-radius: {{ s.div.radius }}px; padding: {{ s.div.padTop }}px {{ s.div.padX }}px {{ s.div.padBottom }}px">
@@ -396,6 +508,61 @@
                 </sc-if>
                 <sc-if value="{{ s.subheadDisplay }}" hint-placeholder-val="{{ true }}">
                   <div class="mz-edit" onClick="{{ s.startSubheadEdit }}" onMouseUp="{{ onSelectText }}" data-rt="{{ s.rtSubhead }}" data-html="{{ s.subheadHtml }}" style="font-size: 19px; font-weight: 700; line-height: 1.5; letter-spacing: -0.01em; color: {{ subheadColor }}; text-wrap: pretty"></div>
+                </sc-if>
+              </div>
+
+              <div style="margin-bottom: 18px">
+                <sc-if value="{{ s.sub.off }}" hint-placeholder-val="{{ true }}">
+                  <div style="display: flex; align-items: center; gap: 8px; border: 1px dashed #c9c5bd; padding: 6px 12px">
+                    <span style="flex: 1; font-size: 11px; font-family: ui-monospace, monospace; color: #a8a39a">{{ s.sub.offLabel }}</span>
+                    <button onClick="{{ s.sub.toggleOn }}" style="border: 1px solid #cfcbc3; background: #fff; color: #46433d; font: inherit; font-size: 10px; font-weight: 700; padding: 4px 8px; cursor: pointer">켜기</button>
+                    <sc-if value="{{ s.sub.hasImage }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ s.sub.onClear }}" style="border: 1px solid #cfcbc3; background: #fff; color: #b4544a; font: inherit; font-size: 10px; padding: 4px 8px; cursor: pointer">삭제</button>
+                    </sc-if>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ s.sub.showImage }}" hint-placeholder-val="{{ false }}">
+                  <div style="position: relative">
+                    <sc-if value="{{ s.sub.isVideo }}" hint-placeholder-val="{{ false }}">
+                      <video data-src="{{ s.sub.image }}" autoplay muted loop playsinline style="width: 100%; aspect-ratio: {{ s.sub.aspect }}; object-fit: cover; display: block"></video>
+                    </sc-if>
+                    <sc-if value="{{ s.sub.isImage }}" hint-placeholder-val="{{ false }}">
+                      <img data-src="{{ s.sub.image }}" alt="" style="width: 100%; aspect-ratio: {{ s.sub.aspect }}; object-fit: cover; display: block">
+                    </sc-if>
+                    <div style="position: absolute; right: 8px; bottom: 8px; display: flex; gap: 6px">
+                      <button onClick="{{ s.sub.toggleOn }}" style="border: none; background: rgba(0,0,0,.6); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">숨기기</button>
+                      <button onClick="{{ s.sub.onPick }}" style="border: none; background: rgba(255,255,255,.92); color: #26241f; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">교체</button>
+                      <button onClick="{{ s.sub.onClear }}" style="border: none; background: rgba(180,84,74,.92); color: #fff; font: inherit; font-size: 10px; font-weight: 700; padding: 5px 8px; cursor: pointer">삭제</button>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ s.sub.noImage }}" hint-placeholder-val="{{ false }}">
+                  <div onDragOver="{{ allowDrop }}" onDrop="{{ s.sub.onDrop }}" style="border: 1px dashed #c9c5bd; background: repeating-linear-gradient(135deg, rgba(0,0,0,.022) 0 6px, transparent 6px 12px); min-height: 190px; display: flex; flex-direction: column; padding: 14px">
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">
+                      <div style="display: flex; gap: 6px; align-items: center">
+                        <button onClick="{{ s.sub.onPick }}" style="border: 1px solid #c2beb6; background: rgba(255,255,255,.6); font: inherit; font-size: 11px; font-weight: 700; color: #6f6a62; padding: 6px 12px; cursor: pointer">이미지 업로드</button>
+                        <button onClick="{{ s.sub.toggleOn }}" style="border: 1px solid #c2beb6; background: rgba(255,255,255,.6); font: inherit; font-size: 10px; font-weight: 700; font-family: ui-monospace, monospace; color: #6f6a62; padding: 6px 9px; cursor: pointer">ON</button>
+                      </div>
+                      <div onClick="{{ s.sub.onPick }}" style="font-size: 11px; font-family: ui-monospace, monospace; color: #a8a39a; cursor: pointer">클릭해서 파일 선택</div>
+                    </div>
+                    <div onClick="{{ stop }}" style="border-top: 1px dashed #cfcbc3; padding-top: 9px; margin-top: 10px">
+                      <div style="display: flex; gap: 8px; align-items: flex-start">
+                        <span style="flex: none; font-size: 10px; font-family: ui-monospace, monospace; color: #a8a39a; padding-top: 2px">{{ s.sub.promptLabel }}</span>
+                        <span class="mz-slot-prompt" contentEditable="{{ s.sub.editable }}" suppressContentEditableWarning="{{ true }}" onBlur="{{ s.sub.onPrompt }}" onInput="{{ s.sub.onPromptInput }}" data-slot-prompt="{{ s.sub.promptValue }}" data-ph="{{ s.sub.placeholder }}" style="flex: 1; min-width: 0; font-size: 11px; line-height: 1.6; color: #8d8880; white-space: pre-line; max-height: 240px; overflow: auto"></span>
+                        <button onClick="{{ s.sub.onCopy }}" style="flex: none; border: 1px solid #cfcbc3; background: #fff; color: #6f6a62; font: inherit; font-size: 10px; font-family: ui-monospace, monospace; padding: 3px 7px; cursor: pointer">{{ s.sub.copyLabel }}</button>
+                      </div>
+                      <sc-if value="{{ s.sub.showActions }}" hint-placeholder-val="{{ true }}">
+                        <div style="display: flex; justify-content: flex-end; margin-top: 6px">
+                          <sc-if value="{{ s.sub.showRegen }}" hint-placeholder-val="{{ true }}">
+                            <button onClick="{{ s.sub.onRegen }}" style="border: none; background: none; color: {{ s.sub.regenColor }}; font: inherit; font-size: 10px; font-family: ui-monospace, monospace; padding: 0; text-decoration: underline; text-underline-offset: 2px; cursor: pointer">{{ s.sub.regenLabel }}</button>
+                          </sc-if>
+                          <sc-if value="{{ s.sub.showCopyReq }}" hint-placeholder-val="{{ false }}">
+                            <button onClick="{{ s.sub.onCopyReq }}" style="border: 1px solid #cfcbc3; background: #fff; color: #6f6a62; font: inherit; font-size: 10px; font-family: ui-monospace, monospace; padding: 3px 7px; cursor: pointer">{{ s.sub.copyReqLabel }}</button>
+                          </sc-if>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </div>
                 </sc-if>
               </div>
 
@@ -959,6 +1126,52 @@ const OUTROS = {
   "블록": function (t) { return { gap: 40, border: "none", bg: t.block || "rgba(127,127,127,.09)", padTop: 22, padX: 18, padBottom: 24, radius: 16 }; }
 };
 
+/* optional image slots added after the original layout: under the title,
+   under the intro, and under each section's subhead (above its body).
+   All default OFF -- the "on" field must be exactly true, so drafts/sections
+   saved before these existed (field undefined) stay off and empty. Their
+   prompts arrive with the main article generation (titlePrompt /
+   introPrompt / sections[].subPrompt in the JSON -- same for the API route
+   and the Claude.ai bridge); switching a slot ON just reveals it. Only when
+   that prompt is empty (e.g. older drafts): with an AI route (host binding
+   or API key) ON generates that one slot as a fallback, without one the
+   slot offers a "Claude.ai용 요청 복사" button instead. An existing prompt
+   is never overwritten except by an explicit "다시 생성". */
+const EXTRA_SLOTS = {
+  title: { img: "titleImage", on: "titleImgOn", prompt: "titlePrompt", aspect: "titleAspect", label: "제목 아래" },
+  intro: { img: "introImage", on: "introImgOn", prompt: "introPrompt", aspect: "introAspect", label: "인트로 아래" },
+  sub: { img: "subImage", on: "subImgOn", prompt: "subPrompt", aspect: "subImageAspect", label: "소제목 아래" }
+};
+const SLOT_EMPTY_PROMPT = "생성된 이미지 프롬프트가 없습니다. 직접 입력해 주세요.";
+const SLOT_LOADING_PROMPT = "프롬프트 생성 중…";
+/* shown instead of SLOT_EMPTY_PROMPT when there is no AI route (no host
+   binding, no API key) -- i.e. the Claude.ai copy/paste bridge users.
+   All three are CSS placeholders (data-ph + :empty::before), never field
+   text, so they can't end up saved as part of a prompt. */
+const SLOT_NO_AI_PROMPT = "프롬프트가 없습니다 · 아래 'Claude.ai용 요청 복사'로 받아 붙여넣거나 직접 입력하세요";
+/* same AI availability test generate() uses: host binding or a saved key */
+function hasSlotAi() { return !!(window.claude && typeof window.claude.complete === "function") || !!getApiKey(); }
+/* sections have no id of their own and are addressed by index everywhere
+   else; an async prompt generation can outlive a delete/reorder, so the
+   section it belongs to gets a stable `sid` (assigned lazily the first time
+   one of its slots is switched ON) and the result is matched back by that. */
+function newSlotSid() { return "s" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function slotHost(doc, kind, sid) {
+  if (!doc) return null;
+  if (kind !== "sub") return doc;
+  if (!sid) return null;
+  return (doc.sections || []).filter(function (s) { return s && s.sid === sid; })[0] || null;
+}
+/* model replies are asked to be prompt-text only, but strip a stray code
+   fence / wrapping quotes if one slips through anyway. */
+function cleanSlotPrompt(raw) {
+  let s = String(raw || "").trim();
+  const fence = s.match(/^```[a-z]*\s*([\s\S]*?)```$/i);
+  if (fence) s = fence[1].trim();
+  if (s.length > 1 && /^["“'「]/.test(s) && /["”'」]$/.test(s)) s = s.slice(1, -1).trim();
+  return s;
+}
+
 /* footer SNS icons / character art, embedded as base64 so the ZIP export never depends on fetch()/canvas being able to reach assets/*.png at runtime -- that silently fails when this file is opened via file:// (fetch to file:// is blocked, and canvas reads of file:// images can be tainted), which is exactly how this tool is normally opened. */
 const ASSET_YT = "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";
 const ASSET_IG = "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";
@@ -1172,8 +1385,11 @@ function imgSlotIds(doc) {
   const ids = [];
   if (doc.thumbnail) ids.push("thumb");
   if (doc.finalImage) ids.push("final");
+  if (doc.titleImage) ids.push("titleImg");
+  if (doc.introImage) ids.push("introImg");
   (doc.sections || []).forEach(function (s, i) {
     if (s.image) ids.push("sec:" + i);
+    if (s.subImage) ids.push("sec:" + i + ":sub");
     (s.images || []).forEach(function (img, j) { if (img) ids.push("sec:" + i + ":x:" + j); });
   });
   (doc.btns || []).forEach(function (b, i) { if (b.img) ids.push("btn:" + i); });
@@ -1182,8 +1398,14 @@ function imgSlotIds(doc) {
 function getImgValue(doc, id) {
   if (id === "thumb") return doc.thumbnail;
   if (id === "final") return doc.finalImage;
+  if (id === "titleImg") return doc.titleImage;
+  if (id === "introImg") return doc.introImage;
   if (id.indexOf("sec:") === 0) {
     const rest = id.slice(4);
+    if (/^\d+:sub$/.test(rest)) {
+      const s = doc.sections[parseInt(rest, 10)];
+      return s ? s.subImage : null;
+    }
     if (rest.indexOf(":x:") !== -1) {
       const parts = rest.split(":x:");
       const s = doc.sections[+parts[0]];
@@ -1199,8 +1421,11 @@ function stripImages(doc) {
   const copy = JSON.parse(JSON.stringify(doc));
   copy.thumbnail = null;
   copy.finalImage = null;
+  if (copy.titleImage) copy.titleImage = null;
+  if (copy.introImage) copy.introImage = null;
   (copy.sections || []).forEach(function (s) {
     s.image = null;
+    if (s.subImage) s.subImage = null;
     if (s.images) s.images = s.images.map(function () { return null; });
   });
   (copy.btns || []).forEach(function (b) { b.img = null; });
@@ -1228,9 +1453,14 @@ function loadImagesInto(doc, draftId) {
       const val = r.val;
       if (id === "thumb") doc.thumbnail = val;
       else if (id === "final") doc.finalImage = val;
+      else if (id === "titleImg") doc.titleImage = val;
+      else if (id === "introImg") doc.introImage = val;
       else if (id.indexOf("sec:") === 0) {
         const rest = id.slice(4);
-        if (rest.indexOf(":x:") !== -1) {
+        if (/^\d+:sub$/.test(rest)) {
+          const s = doc.sections && doc.sections[parseInt(rest, 10)];
+          if (s) s.subImage = val;
+        } else if (rest.indexOf(":x:") !== -1) {
           const parts = rest.split(":x:");
           const s = doc.sections && doc.sections[+parts[0]];
           if (s) { if (!s.images) s.images = []; s.images[+parts[1]] = val; }
@@ -1313,7 +1543,10 @@ class Component extends DCLogic {
     bridgeResponse: "",
     bridgeError: "",
     copied: null,
-    saveError: ""
+    saveError: "",
+    /* per-slot prompt generation status for the optional image slots:
+       key (see _slotGenKey) -> "loading" | "error". UI-only, never saved. */
+    slotGen: {}
   };
 
   componentDidMount() {
@@ -1377,6 +1610,20 @@ class Component extends DCLogic {
       const sel = window.getSelection();
       if (sel && sel.rangeCount > 0 && !sel.isCollapsed && el.contains(sel.getRangeAt(0).commonAncestorContainer)) continue;
       if (el.innerHTML !== html) el.innerHTML = html;
+    }
+    /* optional-slot PROMPT spans are painted here rather than as React text
+       children: once the user edits a contentEditable (select-all + type
+       wipes React's text node), React would keep updating a detached node and
+       the screen would stop following state. Skipped while focused, same as
+       the rich-text fields above. Only the real prompt value ("" when empty)
+       is painted -- guidance/loading text lives in data-ph as a placeholder. */
+    const slotPrompts = document.querySelectorAll("[data-slot-prompt]");
+    for (let k = 0; k < slotPrompts.length; k++) {
+      const el = slotPrompts[k];
+      const txt = el.getAttribute("data-slot-prompt");
+      if (txt === null || txt.indexOf("{{") === 0) continue;
+      if (el === document.activeElement || el.contains(document.activeElement)) continue;
+      if (el.textContent !== txt) el.textContent = txt;
     }
   };
 
@@ -1520,6 +1767,7 @@ class Component extends DCLogic {
     let parsed;
     try { parsed = JSON.parse(raw); } catch (e) { parsed = null; }
     if (!parsed) return;
+    this._clearSlotErr();
     this.draftId = id;
     const finish = (doc) => {
       const patch = { screen: "editor" };
@@ -1770,6 +2018,34 @@ subhead에서 잡은 포인트를 구체적인 정보로 설명합니다.
 
 기사 전체 내용을 다시 요약하기보다 마지막 핵심 메시지나 행동을 가장 적합한 방식으로 표현합니다.
 
+■ titlePrompt
+
+제목 바로 아래에 들어갈 이미지로, 이 글의 주제를 한눈에 소개합니다.
+
+썸네일(thumbPrompt)과는 다른 장면과 구도로 표현합니다.
+본문에 없는 사실을 추가하거나 과장해서는 안 됩니다.
+공백 포함 300자 이내로 간결하게 작성합니다.
+
+■ introPrompt
+
+인트로 바로 아래에 들어갈 이미지로, 인트로에서 말한 독자의 상황이나 고민을 보여줍니다.
+
+결론을 미리 보여주지 말고 독자가 자신의 상황을 대입할 수 있는 장면이나 형식을 선택합니다.
+공백 포함 300자 이내로 간결하게 작성합니다.
+
+■ sections[].subPrompt
+
+각 section의 소제목 바로 아래, 본문 위에 들어갈 이미지로, 그 문단의 도입부 역할을 합니다.
+
+본문을 읽기 전에 이 문단이 무엇을 다루는지 보여주며, 같은 section의 visualPrompt(본문 아래 이미지)와는 다른 관점과 형식을 선택합니다.
+각 subPrompt는 공백 포함 300자 이내로 간결하게 작성합니다.
+
+■ 이웃한 자리끼리 겹치지 않게
+
+* 화면에서 이어서 보이는 자리끼리 같은 장면이나 같은 형식을 반복하지 않습니다: 썸네일 ↔ 제목 아래(titlePrompt) ↔ 인트로 아래(introPrompt) ↔ 첫 번째 section의 subPrompt.
+* 같은 section의 subPrompt와 visualPrompt도 서로 다른 장면·형식으로 작성합니다.
+* 다만 다양성을 위해 부적절한 형식을 억지로 선택하지 않습니다.
+
 ━━━━━━━━━━━━━━━━━━
 [참고자료]
 ━━━━━━━━━━━━━━━━━━
@@ -1806,11 +2082,14 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
 {
 "subhead": "",
 "body": "",
+"subPrompt": "",
 "visualPrompt": ""
 }
 ],
 "outro": "",
 "thumbPrompt": "",
+"titlePrompt": "",
+"introPrompt": "",
 "finalPrompt": ""
 }`;
   };
@@ -1823,6 +2102,12 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
     if (data.outro) doc.outro = String(data.outro);
     if (data.thumbPrompt) doc.thumbPrompt = String(data.thumbPrompt);
     if (data.finalPrompt) doc.finalPrompt = String(data.finalPrompt);
+    /* optional 제목 아래 / 인트로 아래 / 소제목 아래 slots: always overwritten
+       (reply value or empty) so nothing from SAMPLE can linger; the slots
+       themselves stay OFF (titleImgOn etc. left unset) -- turning one ON just
+       reveals the prompt received here. */
+    doc.titlePrompt = data.titlePrompt ? String(data.titlePrompt).trim() : "";
+    doc.introPrompt = data.introPrompt ? String(data.introPrompt).trim() : "";
     const secs = Array.isArray(data.sections) ? data.sections : [];
     doc.sections = secs.map(function (s, i) {
       return {
@@ -1831,7 +2116,8 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
         image: null,
         imageHint: String(s.visualPrompt || "이 자리에 들어갈 이미지 설명"),
         promptEdited: String(s.visualPrompt || ""),
-        imgOn: true
+        imgOn: true,
+        subPrompt: s && s.subPrompt ? String(s.subPrompt).trim() : ""
       };
     });
     if (!doc.sections.length) return this.buildDraft();
@@ -1893,6 +2179,9 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
     if (!res.ok) {
       throw new Error((data && data.error && data.error.message) || ("API 오류 (" + res.status + ")"));
     }
+    if (data && data.stop_reason === "max_tokens") {
+      throw new Error("AI 응답이 길이 한도에서 잘렸습니다. 문단 수를 줄이거나 다시 시도해 주세요.");
+    }
     const blocks = (data && Array.isArray(data.content)) ? data.content : [];
     const text = blocks.filter(function (b) { return b.type === "text"; }).map(function (b) { return b.text; }).join("\n");
     if (!text) throw new Error("AI 응답에 텍스트가 없습니다.");
@@ -1931,6 +2220,268 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
       const msg = e && e.message ? e.message : "알 수 없는 오류";
       this.setState({ screen: "input", genError: "매거진 생성에 실패했습니다: " + msg + " — 입력한 내용은 그대로 있으니 다시 시도해 주세요." });
     }
+  };
+
+  /* ---- optional image slots (제목 아래 / 인트로 아래 / 소제목 아래) ----
+     in-flight generation tokens: plain instance map like undoStack, not
+     state. Switching a slot OFF / typing a prompt by hand drops the token,
+     so a reply that arrives afterwards is ignored instead of landing. */
+  _slotTokens = {};
+
+  /* scoped to the draft so a still-running request from a draft the user
+     has since left (처음부터 다시 / 다른 작업 이어하기) never shows its
+     "생성 중…" on the draft now open. */
+  _slotGenKey = (kind, sid) => (this.draftId || "") + "|" + (kind === "sub" ? "sub:" + (sid || "") : kind);
+
+  _setSlotGen = (key, v) => {
+    this.setState(function (prev) {
+      const m = Object.assign({}, prev.slotGen || {});
+      if (v) m[key] = v; else delete m[key];
+      return { slotGen: m };
+    });
+  };
+
+  _cancelSlotGen = (key) => {
+    delete this._slotTokens[key];
+    if ((this.state.slotGen || {})[key]) this._setSlotGen(key, null);
+  };
+
+  /* the slot-failure banner shares genError with generate()/bridge messages;
+     remember which text this feature put there and only ever clear that one,
+     never a banner from another source. */
+  _slotErrMsg = null;
+  _clearSlotErr = () => {
+    if (this._slotErrMsg && this.state.genError === this._slotErrMsg) this.setState({ genError: "" });
+    this._slotErrMsg = null;
+  };
+
+  /* follows the main prompt's [시각 자료 프롬프트] rules, scoped to one slot,
+     and hands over the prompts that already exist nearby so the new one
+     picks a different scene/format instead of duplicating them. */
+  slotPromptRequest = (kind, sec, doc) => {
+    const f = EXTRA_SLOTS[kind];
+    const txt = function (v) { return plain(stripEmptyMarks(v || "")) || "(없음)"; };
+    const roles = {
+      title: "글 제목 바로 아래에 들어갈 이미지입니다. 이 글의 주제를 한눈에 소개하는 역할입니다. 썸네일(대표 이미지)과는 다른 장면·구도·형식이어야 합니다.",
+      intro: "인트로 문단 바로 아래에 들어갈 이미지입니다. 인트로에서 말한 독자의 상황이나 고민을 보여주는 역할입니다.",
+      sub: "한 문단의 소제목 바로 아래, 본문 위에 들어갈 이미지입니다. 본문을 읽기 전에 이 문단이 무엇을 다루는지 보여주는 도입 역할입니다. 같은 문단의 본문 아래 이미지와는 다른 관점·형식이어야 합니다."
+    };
+    const ctx = ["제목: " + txt(doc.title), "인트로: " + txt(doc.intro)];
+    const existing = [];
+    const addExisting = function (label, v) { const s = String(v || "").trim(); if (s) existing.push("- " + label + ": " + s); };
+    addExisting("썸네일(대표 이미지)", doc.thumbPrompt);
+    if (kind === "title") addExisting("인트로 아래 이미지", doc.introPrompt);
+    if (kind === "intro") {
+      addExisting("제목 아래 이미지", doc.titlePrompt);
+      const first = (doc.sections || [])[0];
+      if (first) addExisting("첫 번째 문단의 소제목 아래 이미지", first[EXTRA_SLOTS.sub.prompt]);
+    }
+    if (kind === "sub") {
+      addExisting("제목 아래 이미지", doc.titlePrompt);
+      addExisting("인트로 아래 이미지", doc.introPrompt);
+      if (sec) {
+        ctx.push("이 문단의 소제목: " + txt(sec.subhead));
+        ctx.push("이 문단의 본문: " + txt(sec.body));
+        addExisting("이 문단의 본문 아래 이미지", sec.promptEdited || sec.prompt);
+      }
+      (doc.sections || []).forEach(function (s, i) {
+        if (s && s !== sec) addExisting((i + 1) + "번째 문단의 소제목 아래 이미지", s[f.prompt]);
+      });
+    }
+    return `당신은 매거진 기사에 들어갈 시각 자료의 한국어 제작 프롬프트를 쓰는 에디터입니다.
+
+━━━━━━━━━━━━━━━━━━
+[이번에 만들 자리]
+━━━━━━━━━━━━━━━━━━
+
+${roles[kind]}
+
+━━━━━━━━━━━━━━━━━━
+[시각 자료 프롬프트 규칙]
+━━━━━━━━━━━━━━━━━━
+
+무조건 사진을 만들지 마세요.
+
+먼저 아래 기사 내용에서 이 자리가 전달해야 할 핵심 정보와 목적을 분석한 뒤 사진, 상황 이미지, 표, 비교표, 인포그래픽, 그래프, 타임라인, 흐름도, 관계도, 체크리스트, 다이어그램 등 가장 적합한 시각 표현 방식을 스스로 선택합니다.
+
+* 시각적 아름다움보다 내용 전달을 우선합니다.
+* 실제 상황을 보여주는 것이 이해에 더 도움이 된다면 사진형 이미지를 선택합니다.
+* 기사 내용에 실제로 있는 정보만 사용합니다.
+* 기사에 없는 숫자·조건·사례·정보를 추가하지 않습니다.
+* 아래 [이미 있는 프롬프트]와 장면·구도·형식이 겹치지 않게 다른 것을 선택합니다. 다만 다양성을 위해 부적절한 형식을 억지로 선택하지 않습니다.
+* 비율, 여백, 색상, 조명, 구도 등은 내용 전달에 필요한 경우에만 지정합니다.
+* 표·인포그래픽·다이어그램 등 텍스트가 필요한 시각 자료는 기사의 실제 정보와 수치를 정확하게 사용합니다.
+* 사진형 이미지에는 의미 없는 문자, 가짜 문서 내용, 브랜드 로고가 나타나지 않도록 합니다.
+* 단순히 시각 자료의 종류만 지정하지 말고, 무엇을 보여주고 어떤 정보를 어떻게 배치할지 실제 제작 가능한 수준으로 구체적으로 작성합니다.
+
+━━━━━━━━━━━━━━━━━━
+[기사 내용]
+━━━━━━━━━━━━━━━━━━
+
+${ctx.join("\n\n")}
+
+━━━━━━━━━━━━━━━━━━
+[이미 있는 프롬프트 — 겹치지 않게]
+━━━━━━━━━━━━━━━━━━
+
+${existing.length ? existing.join("\n") : "없음"}
+
+━━━━━━━━━━━━━━━━━━
+[출력 규칙]
+━━━━━━━━━━━━━━━━━━
+
+이 자리에 쓸 제작 프롬프트 본문만 출력하세요.
+앞뒤에 제목, 설명, 인사말, 따옴표, 마크다운, 코드블록 또는 다른 텍스트를 추가하지 마세요.`;
+  };
+
+  /* same AI routing as generate(): host binding first, else the saved API
+     key via callClaude. Failures surface through the same genError banner
+     generate() uses (e.g. "API 키가 설정되어 있지 않습니다."), and the slot
+     itself flips to "생성 실패 · 다시 시도" with the prompt left editable. */
+  _runSlotGen = async (kind, sid, doc) => {
+    const f = EXTRA_SLOTS[kind];
+    const host0 = slotHost(doc, kind, sid);
+    if (!host0) return;
+    const key = this._slotGenKey(kind, sid);
+    const draftId = this.draftId;
+    const before = host0[f.prompt] || "";
+    const token = {};
+    this._slotTokens[key] = token;
+    this._setSlotGen(key, "loading");
+    const hasHostAi = !!(window.claude && typeof window.claude.complete === "function");
+    let text = "", err = null;
+    try {
+      const req = this.slotPromptRequest(kind, kind === "sub" ? host0 : null, doc);
+      const raw = hasHostAi ? await window.claude.complete(req) : await this.callClaude(req);
+      text = cleanSlotPrompt(raw);
+      if (!text) throw new Error("AI 응답에 프롬프트가 없습니다.");
+    } catch (e) { err = e; }
+    /* switched OFF / typed over / superseded by a newer request meanwhile */
+    if (this._slotTokens[key] !== token) return;
+    delete this._slotTokens[key];
+    /* the user left this draft meanwhile: just drop the status, no error mark */
+    if (this.draftId !== draftId) { this._setSlotGen(key, null); return; }
+    this._setSlotGen(key, err ? "error" : null);
+    if (err) {
+      const msg = err && err.message ? err.message : "알 수 없는 오류";
+      this._slotErrMsg = "이미지 프롬프트 생성에 실패했습니다: " + msg + " — PROMPT 칸에 직접 입력하거나 다시 시도해 주세요.";
+      this.setState({ genError: this._slotErrMsg });
+      return;
+    }
+    this._clearSlotErr();
+    /* re-resolve against the live doc: the section is found by sid, so a
+       delete/reorder in the meantime can't misplace the result, and it only
+       lands if the slot is still ON and nobody changed its prompt since. */
+    const cur = slotHost(this.state.doc, kind, sid);
+    if (!cur || cur[f.on] !== true || (cur[f.prompt] || "") !== before) return;
+    this.setDoc(function (d) { const h = slotHost(d, kind, sid); if (h) h[f.prompt] = text; });
+  };
+
+  toggleSlot = (kind, i) => {
+    const f = EXTRA_SLOTS[kind];
+    const doc = JSON.parse(JSON.stringify(this.state.doc));
+    const h = kind === "sub" ? doc.sections[i] : doc;
+    if (!h) return;
+    const turningOn = h[f.on] !== true;
+    if (turningOn && kind === "sub" && !h.sid) h.sid = newSlotSid();
+    h[f.on] = turningOn;
+    this.persist({ doc: doc });
+    const sid = kind === "sub" ? h.sid : null;
+    if (!turningOn) {
+      if (kind !== "sub" || sid) this._cancelSlotGen(this._slotGenKey(kind, sid));
+      this._clearSlotErr();
+      return;
+    }
+    /* prompts normally arrive with the article (titlePrompt/introPrompt/
+       subPrompt in the main JSON), so ON just reveals them. Only an empty
+       prompt (e.g. drafts made before these fields existed) is generated
+       here, and only when an AI route exists -- bridge users get the copy-
+       request button instead, with no call and no error banner. A kept
+       prompt (generated or typed) is never replaced; a slot already holding
+       an image doesn't show its prompt, so skip that too. */
+    if (!String(h[f.prompt] || "").trim() && !h[f.img] && hasSlotAi()) this._runSlotGen(kind, sid, doc);
+  };
+
+  regenSlot = (kind, i) => {
+    const f = EXTRA_SLOTS[kind];
+    let doc = this.state.doc;
+    const h = kind === "sub" ? doc.sections[i] : doc;
+    if (!h || h[f.on] !== true || !hasSlotAi()) return;
+    let sid = kind === "sub" ? h.sid : null;
+    if (kind === "sub" && !sid) {
+      sid = newSlotSid();
+      doc = JSON.parse(JSON.stringify(doc));
+      doc.sections[i].sid = sid;
+      this.persist({ doc: doc });
+    }
+    if ((this.state.slotGen || {})[this._slotGenKey(kind, sid)] === "loading") return;
+    this._runSlotGen(kind, sid, doc);
+  };
+
+  /* template values for one optional slot -- same shape for all three so
+     the markup can be repeated verbatim with a different prefix. */
+  _slotVals = (kind, host, i) => {
+    const self = this;
+    const st = this.state;
+    const f = EXTRA_SLOTS[kind];
+    const sid = kind === "sub" ? host.sid : null;
+    const key = kind === "sub" && !sid ? null : this._slotGenKey(kind, sid);
+    const gen = key ? (st.slotGen || {})[key] || null : null;
+    const on = host[f.on] === true;
+    const img = host[f.img] || null;
+    const prompt = host[f.prompt] || "";
+    /* emptiness is judged on the trimmed value, same as toggleSlot */
+    const hasPrompt = !!String(prompt).trim();
+    const ai = hasSlotAi();
+    const copyKey = kind === "sub" ? "sub" + i : kind + "Img";
+    const mutate = function (fn) { self.setDoc(function (d) { const h = kind === "sub" ? d.sections[i] : d; if (h) fn(h); }); };
+    const setImg = function (url, a) { mutate(function (h) { h[f.img] = url; h[f.aspect] = a; }); };
+    return {
+      off: !on,
+      hasImage: !!img,
+      showImage: on && !!img,
+      noImage: on && !img,
+      image: img,
+      isVideo: isVideoSrc(img),
+      isImage: !!img && !isVideoSrc(img),
+      aspect: host[f.aspect] || 0.75,
+      offLabel: f.label + " 이미지 · 꺼짐",
+      promptLabel: "PROMPT " + f.label,
+      /* field text = the real prompt only ("" while loading or empty); all
+         guidance, including the loading label, is the data-ph placeholder */
+      promptValue: gen === "loading" || !hasPrompt ? "" : prompt,
+      placeholder: gen === "loading" ? SLOT_LOADING_PROMPT : (ai ? SLOT_EMPTY_PROMPT : SLOT_NO_AI_PROMPT),
+      /* read-only while a reply is on its way, so there's nothing to type over */
+      editable: gen !== "loading",
+      showRegen: ai,
+      showCopyReq: !ai && !hasPrompt,
+      showActions: ai || !hasPrompt,
+      copyReqLabel: st.copied === "req:" + copyKey ? "복사됨" : "Claude.ai용 요청 복사",
+      onCopyReq: function () { self.copyText(self.slotPromptRequest(kind, kind === "sub" ? host : null, self.state.doc), "req:" + copyKey); },
+      regenLabel: gen === "loading" ? "생성 중…" : (gen === "error" ? "생성 실패 · 다시 시도" : "다시 생성"),
+      regenColor: gen === "error" ? "#b4544a" : "#6f6a62",
+      copyLabel: st.copied === copyKey ? "복사됨" : "복사",
+      onCopy: function () { self.copyText(prompt, copyKey); },
+      toggleOn: function () { self.toggleSlot(kind, i); },
+      onRegen: function () { self.regenSlot(kind, i); },
+      /* deleting everything can leave a stray <br> behind, which would stop
+         :empty (and so the placeholder) from matching -- drop it */
+      onPromptInput: function (e) { const el = e.currentTarget; if (!el.textContent && el.innerHTML) el.innerHTML = ""; },
+      onPrompt: function (e) {
+        const el = e.currentTarget;
+        const v = el.innerText.trim();
+        if (!v && el.innerHTML) el.innerHTML = "";
+        if (v === String(prompt).trim()) return;
+        /* typing by hand wins over any reply still on its way */
+        if (key) self._cancelSlotGen(key);
+        self._clearSlotErr();
+        mutate(function (h) { h[f.prompt] = v; });
+      },
+      onPick: function () { self.openPicker(false, function (fs) { self.readFile(fs[0], setImg); }); },
+      onDrop: function (e) { self.onDropFiles(e, function (fs) { self.readFile(fs[0], setImg); }); },
+      /* clears the image only; the slot keeps its ON/OFF state */
+      onClear: function () { mutate(function (h) { h[f.img] = null; }); }
+    };
   };
 
   openPicker = (multiple, cb) => {
@@ -2089,8 +2640,18 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
     if (doc.badgeOn !== false) {
       p.push('<div class="hero" style="display:flex;margin-bottom:20px;animation-delay:.12s"><span style="border:1px solid ' + t.sub + ';border-radius:999px;padding:4px 12px;font-size:11px;font-weight:500;line-height:1.4;letter-spacing:.02em;color:' + t.sub + '">' + esc(doc.badge || "나인톡") + " · " + esc(doc.category || "헬스") + "</span></div>");
     }
+    /* optional 제목 아래 / 인트로 아래 / 소제목 아래 slots: emitted only when
+       switched ON and actually holding an image -- OFF or empty = nothing. */
+    const slotMedia = function (host, f, cls, extraStyle) {
+      if (!host || host[f.on] !== true || !host[f.img]) return;
+      const src = put(host[f.img]);
+      if (src) p.push(mediaTag(src, host[f.img], cls, extraStyle));
+    };
+
     p.push('<h1 class="ttl hero" style="animation-delay:.22s">' + stripEmptyMarks(doc.title || "") + "</h1>");
+    slotMedia(doc, EXTRA_SLOTS.title, "img hero", "margin-top:0;margin-bottom:22px;animation-delay:.3s");
     p.push('<div class="body reveal">' + bodyToHtml(doc.intro || "") + "</div>");
+    slotMedia(doc, EXTRA_SLOTS.intro, "img reveal-media");
 
     doc.sections.forEach(function (s, i) {
       const divName = s.divider || doc.divider || "여백만";
@@ -2100,6 +2661,7 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
       if (div.showRule) p.push('<div style="width:34px;height:3px;background:' + (t.line || t.point) + ';margin-bottom:16px"></div>');
       const numHtml = doc.numOn === false ? "" : '<span class="num" style="' + (doc.numFill ? "background:" + t.num + ";color:" + t.bg + ";border-color:" + t.num : "") + '">' + esc((NUM_STYLES[doc.numStyle] || NUM_STYLES["01"])(i)) + "</span>";
       p.push("<div>" + numHtml + '<h2 class="sub">' + stripEmptyMarks(s.subhead || "") + "</h2></div>");
+      slotMedia(s, EXTRA_SLOTS.sub, "img r-img", "margin-top:0;margin-bottom:18px");
       p.push('<div class="body">' + bodyToHtml(s.body) + "</div>");
       const src = s.imgOn === false ? null : put(s.image);
       if (src) p.push(mediaTag(src, s.image, "img r-img"));
@@ -2517,6 +3079,8 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
         imageHidden: s.imgOn === false,
         toggleImgOn: function () { self.setDoc(function (d) { d.sections[i].imgOn = d.sections[i].imgOn === false; }); },
         onClear: function () { self.setDoc(function (d) { d.sections[i].image = null; d.sections[i].imgOn = true; }); },
+        /* optional 소제목 아래 image slot (default OFF) */
+        sub: self._slotVals("sub", s, i),
 
         /* extra images: uploaded after generation, so no AI prompt needed -- just upload/remove/reorder */
         extraImages: (s.images || []).map(function (src, j, arr) {
@@ -2839,6 +3403,8 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
       docOutro: doc.outro,
       titleHtml: stripEmptyMarks(doc.title || ""),
       introHtml: bodyToHtml(doc.intro || ""),
+      titleSlot: this._slotVals("title", doc, -1),
+      introSlot: this._slotVals("intro", doc, -1),
       outroHtml: bodyToHtml(doc.outro || ""),
       onSelectText: this.onSelectText,
       onEditKeyDown: this.onEditKeyDown,
@@ -2958,6 +3524,7 @@ JSON 앞뒤에 설명, 인사말, 마크다운, 코드블록 또는 다른 텍�
            id, so this just switches the session onto a fresh blank one --
            the old work stays in the list below to resume later. */
         self.draftId = null;
+        self._clearSlotErr();
         self.setState({
           resetOpen: false, screen: "input", saveError: "",
           doc: JSON.parse(JSON.stringify(SAMPLE)),
